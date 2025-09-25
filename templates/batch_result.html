@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Batch Prediction Result</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+    <style>
+        table.data {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table.data,
+        table.data th,
+        table.data td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        table.data th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container my-4 fade-in">
+        <h1 class="mb-4 text-center">Batch Prediction Results (Showing first 50 rows)</h1>
+
+        {% for table in tables %}
+        {{ table|safe }}
+        {% endfor %}
+
+        {% if roc_data %}
+        <h2 class="mt-5 text-center">ROC Curve</h2>
+        <canvas id="rocChart" width="600" height="400"></canvas>
+        {% endif %}
+
+        {% if cm_data %}
+        <h2 class="mt-5 text-center">Confusion Matrix</h2>
+        <canvas id="cmChart" width="600" height="400"></canvas>
+        {% endif %}
+
+        <div class="text-center mt-5">
+            <a href="/upload" class="btn btn-outline-primary">Back to CSV Upload</a>
+            <a href="/" class="btn btn-outline-secondary ms-2">Back to Single Prediction</a>
+        </div>
+    </div>
+
+    <script>
+        {% if roc_data %}
+        const rocCtx = document.getElementById('rocChart').getContext('2d');
+        new Chart(rocCtx, {
+            type: 'line',
+            data: {
+                labels: {{ roc_data.fpr | safe }},
+            datasets: [{
+                label: 'ROC Curve',
+                data: {{ roc_data.tpr | safe }},
+            borderColor: 'rgb(75, 192, 192)',
+            fill: false,
+            tension: 0.1
+        }]
+      },
+            options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'False Positive Rate'
+                    },
+                    min: 0,
+                    max: 1
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'True Positive Rate'
+                    },
+                    min: 0,
+                    max: 1
+                }
+            }
+        }
+    });
+        {% endif %}
+
+        {% if cm_data %}
+        const cmCtx = document.getElementById('cmChart').getContext('2d');
+        const cmMatrix = {{ cm_data| safe }};
+        const data = {
+            labels: ['Legitimate Pred', 'Fraud Pred'],
+            datasets: [{
+                label: 'Legitimate True',
+                data: [cmMatrix[0][0], cmMatrix[1][0]],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)'
+            },
+            {
+                label: 'Fraud True',
+                data: [cmMatrix[0][1], cmMatrix[1][1]],
+                backgroundColor: 'rgba(255, 99, 132, 0.7)'
+            }
+            ]
+        };
+        new Chart(cmCtx, {
+            type: 'bar',
+            data: data,
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        precision: 0
+                    },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
