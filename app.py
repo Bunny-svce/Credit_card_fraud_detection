@@ -1,16 +1,17 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import io
-import base64
 
 from src.complete_implementation import CreditCardFraudDetectionPipeline
 from sklearn.metrics import roc_curve, confusion_matrix
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'
+
+# In-memory user storage (for demo purposes)
+users = {}  # {username: hashed_password}
 
 # Load pipeline once
 pipeline = CreditCardFraudDetectionPipeline()
@@ -18,14 +19,76 @@ pipeline.run_complete_pipeline(filepath=None, use_novel_sampling=False)
 clf = pipeline.clf
 scaler = pipeline.pre.scaler
 
+# -------------------------
+# Authentication Routes
+# -------------------------
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        confirm = request.form['confirm_password'].strip()
+
+        if username in users:
+            flash('Username already exists!')
+            return redirect(url_for('register'))
+        if password != confirm:
+            flash('Passwords do not match!')
+            return redirect(url_for('register'))
+        if not username or not password:
+            flash('Please enter valid username and password.')
+            return redirect(url_for('register'))
+
+        # Hash password
+        hashed = generate_password_hash(password)
+        users[username] = hashed
+        flash('Registration successful! Please login.')
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+
+        if username not in users or not check_password_hash(users[username], password):
+            flash('Invalid username or password!')
+            return redirect(url_for('login'))
+
+        session['user'] = username
+        flash(f'Welcome, {username}!')
+        return redirect(url_for('home'))
+
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash('You have been logged out.')
+    return redirect(url_for('login'))
+
+
+# -------------------------
+# Main Prediction Routes
+# -------------------------
 @app.route('/')
 def home():
-    return render_template('index.html')
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('index.html', username=session['user'])
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
     try:
         features = [float(request.form[f'V{i}']) for i in range(1, 29)]
         features.append(float(request.form['Time']))
@@ -45,11 +108,16 @@ def predict():
 
 @app.route('/upload')
 def upload():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     return render_template('upload.html')
 
 
 @app.route('/upload_predict', methods=['POST'])
 def upload_predict():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
     if 'file' not in request.files:
         flash('No file part')
         return redirect(url_for('upload'))
