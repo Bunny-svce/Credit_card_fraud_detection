@@ -1,0 +1,138 @@
+/* General fade-in for container */
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* fade-out for submit */
+.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+/* Button hover animation */
+.animate-btn {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.animate-btn:hover,
+.animate-btn:focus {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
+}
+
+/* Grid layout for prediction form */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Button colors */
+.btn-outline-primary {
+    color: #007bff;
+    border: 2px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+    background: #007bff;
+    color: white;
+}
+
+.btn-outline-success {
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.btn-outline-success:hover {
+    background: #28a745;
+    color: white;
+}
+
+.btn-outline-dark {
+    color: #343a40;
+    border: 2px solid #343a40;
+}
+
+.btn-outline-dark:hover {
+    background: #343a40;
+    color: white;
+}
+
+.btn-outline-warning {
+    color: #ffc107;
+    border: 2px solid #ffc107;
+}
+
+.btn-outline-warning:hover {
+    background: #ffc107;
+    color: #212529;
+}
+
+/* Loading spinner container */
+.spinner-container {
+    display: none;
+    /* hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #aaa;
+}
+
+/* Show spinner when active */
+.spinner-container.show {
+    display: block;
+}
