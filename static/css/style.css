@@ -1,4 +1,4 @@
-/* General fade-in for container */
+/* General fade-in */
 .fade-in {
     animation: fadeIn 0.8s ease forwards;
     opacity: 0;
@@ -10,7 +10,7 @@
     }
 }
 
-/* fade-out for submit */
+/* fade-out */
 .fade-out {
     animation: fadeOut 0.3s ease forwards;
 }
@@ -43,7 +43,7 @@
     padding: 30px;
 }
 
-/* Grid layout for prediction form */
+/* Grid layout for forms */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -64,7 +64,7 @@
     font-size: 14px;
 }
 
-/* Buttons */
+/* Buttons base */
 .btn {
     display: inline-block;
     text-decoration: none;
@@ -73,9 +73,10 @@
     font-size: 16px;
     font-weight: 500;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-/* Button colors */
+/* Button variants */
 .btn-outline-primary {
     color: #007bff;
     border: 2px solid #007bff;
@@ -116,10 +117,51 @@
     color: #212529;
 }
 
-/* Loading spinner container */
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.navbar h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Navbar right: welcome + signout */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar .welcome {
+    font-weight: bold;
+}
+
+/* Sign out button */
+.btn-danger {
+    background: #dc3545 !important;
+    border: none !important;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333 !important;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.6);
+    transform: scale(1.08);
+}
+
+/* Loading spinner */
 .spinner-container {
     display: none;
-    /* hidden by default */
     position: fixed;
     top: 50%;
     left: 50%;
@@ -132,7 +174,6 @@
     box-shadow: 0 0 10px #aaa;
 }
 
-/* Show spinner when active */
 .spinner-container.show {
     display: block;
 }
