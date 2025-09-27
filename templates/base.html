@@ -14,8 +14,10 @@
 
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-left">
-            <h2>Fraud Detection</h2>
+        <div class="navbar-left d-flex align-items-center">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"
+                style="height: 50px; margin-right: 10px;">
+            <h2 class="m-0">Credit Card Fraud Detection</h2>
         </div>
         <div class="navbar-right">
             {% if session.get('user') %}
@@ -24,6 +26,7 @@
             {% endif %}
         </div>
     </nav>
+
 
     <!-- Flash messages -->
     {% with messages = get_flashed_messages() %}
