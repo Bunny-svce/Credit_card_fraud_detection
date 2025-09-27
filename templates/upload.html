@@ -1,54 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Upload CSV - Fraud Detection{% endblock %}
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Batch Prediction Upload</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-</head>
-
-<body>
-    <!-- Spinner -->
-    <div id="loadingSpinner" class="spinner-container">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="mt-2">Processing... Please wait.</p>
-    </div>
-
-    <div class="container fade-in my-5 text-center">
-        <h1>Upload CSV for Batch Prediction</h1>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="alert alert-danger">{{ messages[0] }}</div>
-        {% endif %}
-        {% endwith %}
-        <form action="/upload_predict" method="POST" enctype="multipart/form-data" id="uploadForm">
-            <input type="file" name="file" accept=".csv" required />
-            <br /><br />
-            <button type="submit" class="btn btn-primary btn-lg animate-btn">
-                Upload and Predict
-            </button>
-        </form>
-        <a href="/" class="btn btn-link mt-3">Back to Single Prediction</a>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const form = document.getElementById('uploadForm');
-        const spinner = document.getElementById('loadingSpinner');
-
-        form.addEventListener('submit', function () {
-            spinner.classList.add('show'); // show spinner on submit
-        });
-
-        window.addEventListener('load', function () {
-            spinner.classList.remove('show'); // hide spinner after response
-        });
-    </script>
-</body>
-
-</html>
+{% block content %}
+<h3>Upload CSV File</h3>
+<form method="POST" action="{{ url_for('upload_predict') }}" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit" class="btn btn-outline-primary animate-btn">Upload & Predict</button>
+</form>
+{% endblock %}
