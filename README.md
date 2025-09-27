@@ -43,7 +43,6 @@ credit_card_fraud_detection/
 │   └── complete_implementation.py
 │
 ├── templates/              # HTML templates
-|   |
 │   ├── index.html
 │   ├── result.html
 │   ├── upload.html
