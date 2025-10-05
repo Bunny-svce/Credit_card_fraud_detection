@@ -1,31 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Home - Fraud Detection{% endblock %}
+{% block title %}Dashboard - Credit Card Fraud Detection{% endblock %}
 
 {% block content %}
-<h3>Enter Transaction Details</h3>
-<form method="POST" action="{{ url_for('predict') }}" class="fade-in">
-    <div class="grid-container">
-        {% for i in range(1,29) %}
-        <div class="form-group">
-            <label for="V{{ i }}">V{{ i }}</label>
-            <input type="number" step="any" name="V{{ i }}" class="form-control" required>
-        </div>
-        {% endfor %}
-        <div class="form-group">
-            <label for="Time">Time</label>
-            <input type="number" step="any" name="Time" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="Amount">Amount</label>
-            <input type="number" step="any" name="Amount" class="form-control" required>
+<div class="fade-in mt-4">
+    <div class="card shadow-lg border-0 p-4">
+        <h3 class="text-center text-primary mb-4">
+            <i class="fas fa-credit-card"></i> Enter Transaction Details
+        </h3>
+
+        <form method="POST" action="{{ url_for('predict') }}">
+            <div class="grid-container">
+                {% for i in range(1, 29) %}
+                <div class="form-group">
+                    <label for="V{{ i }}">V{{ i }}</label>
+                    <input type="number" step="any" name="V{{ i }}" class="form-control" required>
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <label for="Time">Time</label>
+                    <input type="number" step="any" name="Time" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="Amount">Amount</label>
+                    <input type="number" step="any" name="Amount" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-outline-primary animate-btn">
+                    <i class="fas fa-magnifying-glass"></i> Predict
+                </button>
+            </div>
+        </form>
+
+        <div class="upload-section mt-4 text-center">
+            <a href="{{ url_for('upload') }}" class="btn btn-outline-success animate-btn">
+                <i class="fas fa-file-upload"></i> Upload CSV for Batch Prediction
+            </a>
         </div>
     </div>
-    <button type="submit" class="btn btn-outline-primary animate-btn">Predict</button>
-</form>
-
-<div class="upload-section mt-3">
-    <a href="{{ url_for('upload') }}" class="btn btn-outline-success animate-btn">
-        Upload CSV for Batch Prediction
-    </a>
 </div>
 {% endblock %}

@@ -1,32 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Prediction Result{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Prediction Result</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block content %}
+<div class="fade-in mt-5 text-center">
+    <div class="card shadow-lg border-0 p-4 mx-auto" style="max-width: 500px;">
+        <h3 class="text-primary mb-3"><i class="fas fa-clipboard-check"></i> Prediction Result</h3>
+        <p><strong>Transaction Status:</strong>
+            <span class="fw-bold {% if label == 'Fraud' %}text-danger{% else %}text-success{% endif %}">
+                {{ label }}
+            </span>
+        </p>
+        <p><strong>Fraud Probability:</strong> {{ probability }}</p>
 
-<body class="fade-in">
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-left">
-            <h2>Fraud Detection</h2>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome">Welcome, {{ session['user'] }}</span>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger animate-btn">Sign Out</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h3>Prediction Result</h3>
-        <p><strong>Label:</strong> {{ label }}</p>
-        <p><strong>Probability:</strong> {{ probability }}</p>
-        <a href="{{ url_for('home') }}" class="btn btn-outline-primary animate-btn">Back</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary animate-btn mt-3">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}

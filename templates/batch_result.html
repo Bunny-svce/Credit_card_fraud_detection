@@ -1,38 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block title %}Batch Prediction Results{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Batch Prediction Results</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+{% block content %}
+<div class="fade-in mt-4">
+    <div class="card shadow-lg border-0 p-4">
+        <h3 class="text-center text-success mb-3">
+            <i class="fas fa-table"></i> Batch Prediction Results
+        </h3>
 
-<body class="fade-in">
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-left">
-            <h2>Fraud Detection</h2>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome">Welcome, {{ session['user'] }}</span>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger animate-btn">Sign Out</a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h3>Batch Prediction Results (showing top 50)</h3>
         {% for table in tables %}
-        {{ table | safe }}
+        <div class="table-responsive">
+            {{ table | safe }}
+        </div>
         {% endfor %}
 
         {% if roc_data %}
-        <h4>ROC Curve</h4>
+        <h4 class="mt-5 text-primary">ROC Curve</h4>
         <canvas id="rocChart"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            const ctx = document.getElementById('rocChart').getContext('2d');
-            new Chart(ctx, {
+            const rocCtx = document.getElementById('rocChart').getContext('2d');
+            new Chart(rocCtx, {
                 type: 'line',
                 data: {
                     labels: {{ roc_data.fpr | safe }},
@@ -41,16 +29,11 @@
                     data: {{ roc_data.tpr | safe }},
                 borderColor: 'blue',
                 borderWidth: 2,
-                fill: false,
-                tension: 0.1
+                fill: false
                     }]
                 },
                 options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: true },
-                    tooltip: { enabled: true }
-                },
                 scales: {
                     x: { title: { display: true, text: 'False Positive Rate' } },
                     y: { title: { display: true, text: 'True Positive Rate' } }
@@ -61,14 +44,7 @@
         {% endif %}
 
         {% if cm_data %}
-        <h4>Confusion Matrix</h4>
-        <p>
-            <strong>TP:</strong> {{ cm_data[1][1] }} |
-            <strong>FP:</strong> {{ cm_data[0][1] }} |
-            <strong>TN:</strong> {{ cm_data[0][0] }} |
-            <strong>FN:</strong> {{ cm_data[1][0] }}
-        </p>
-
+        <h4 class="mt-5 text-primary">Confusion Matrix</h4>
         <canvas id="cmChart" width="400" height="400"></canvas>
         <script>
             const cmCtx = document.getElementById('cmChart').getContext('2d');
@@ -80,18 +56,12 @@
                         {
                             label: 'Actual Negative',
                             data: [{{ cm_data[0][0] }}, {{ cm_data[0][1] }}],
-                backgroundColor: [
-                    'rgba(0, 200, 83, 0.6)',   // TN green
-                    'rgba(255, 193, 7, 0.6)'   // FP yellow
-                ]
+                backgroundColor: ['rgba(0,200,83,0.6)', 'rgba(255,193,7,0.6)']
             },
                 {
                     label: 'Actual Positive',
                     data: [{{ cm_data[1][0] }}, {{ cm_data[1][1] }}],
-                backgroundColor: [
-                'rgba(244, 67, 54, 0.6)',  // FN red
-                'rgba(33, 150, 243, 0.6)'  // TP blue
-            ]
+                backgroundColor: ['rgba(244,67,54,0.6)', 'rgba(33,150,243,0.6)']
                         }
                     ]
                 },
@@ -100,30 +70,22 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Confusion Matrix (Visualized)',
+                        text: 'Confusion Matrix Visualization',
                         font: { size: 16 }
                     },
-                    legend: { position: 'bottom' },
-                    tooltip: {
-                        callbacks: {
-                            label: function (ctx) {
-                                return ctx.dataset.label + ': ' + ctx.formattedValue;
-                            }
-                        }
-                    }
+                    legend: { position: 'bottom' }
                 },
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, beginAtZero: true, precision: 0 }
-                }
+                scales: { y: { beginAtZero: true } }
             }
             });
         </script>
         {% endif %}
 
-        <a href="{{ url_for('home') }}" class="btn btn-outline-primary animate-btn">Back to Home</a>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-dark animate-btn">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
+        </div>
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
