@@ -32,17 +32,22 @@ Deployment: Docker, Gunicorn, NGINX
 📂 Project Structure
 credit_card_fraud_detection/
 │
-├── app.py                  # Flask web application
-├── Dockerfile              # Docker configuration
-├── docker-compose.yml      # Multi-container deployment (optional)
-├── nginx.conf              # NGINX reverse proxy (optional)
-├── requirements.txt        # Python dependencies
-├── sample_input.csv        # CSV template for batch upload
+├── app.py                         # Main Flask app (entry point)
+├── Dockerfile                     # (we’ll add)
+├── docker-compose.yml             # (optional, we’ll generate)
+├── nginx.conf                     # (optional reverse proxy)
+├── requirements.txt               # Dependencies
+├── sample_input.csv               # Example upload CSV
 │
-├── src/                    # Core ML pipeline
+├── src/                           # Machine learning pipeline
 │   └── complete_implementation.py
 │
-├── templates/              # HTML templates
+├── templates/
+│   ├── base.html
+│   ├── layout.html
+│   ├── login.html
+│   ├── register.html
+│   ├── home.html
 │   ├── index.html
 │   ├── result.html
 │   ├── upload.html
@@ -50,13 +55,14 @@ credit_card_fraud_detection/
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css       # Custom styles
+│   │   └── style.css
 │   └── images/
-│       └── logo.png        # Project logo
+│       └── logo.png
 │
-└── screenshots/            # Screenshots for README
+└── screenshots/
     ├── home.png
-    └── batch_results.png
+    ├── dashboard.png
+    ├── batch_results.png
 
 ⚙️ Setup Instructions
 🔹 Local Development
